@@ -1,1 +1,21 @@
+{
+  "description": "List of Roblox Place IDs used by my project.",
+  "places": [
+    {
+      "id": 2788229376,
+      "slug": "Da Hood",
+      "notes": ""
+    },
+    {
+      "id": 94810129626646,
+      "slug": "Das-Hood",
+      "notes": ""
+    },
+    {
+      "id": 105767241934424,
+      "slug": "EVIL-DEE-H00DS",
+      "notes": ""
+    }
+  ]
+}
 
