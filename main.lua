@@ -1,3 +1,65 @@
+-- safe_place_check.lua  (harmless demo ONLY)
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- <-- replace with your real raw.githubusercontent.com link -->
+local rawUrl = "https://raw.githubusercontent.com/YourUsername/YourRepo/main/game_ids.json"
+
+local function fetchPlaceData()
+    local ok, res = pcall(function() return HttpService:GetAsync(rawUrl, true) end)
+    if not ok then
+        warn("Failed to fetch game_ids.json:", res)
+        return nil
+    end
+    local success, data = pcall(function() return HttpService:JSONDecode(res) end)
+    if not success then
+        warn("Invalid JSON:", data)
+        return nil
+    end
+    return data
+end
+
+local function placeIsListed(list, id)
+    for _, p in ipairs(list or {}) do
+        -- handle numeric IDs stored as numbers or strings
+        if tonumber(p.id) and tonumber(p.id) == id then
+            return true, p.name or tostring(p.id)
+        end
+    end
+    return false
+end
+
+-- MAIN: fetch and check
+local data = fetchPlaceData()
+if not data or not data.places then
+    warn("No place list found.")
+    return
+end
+
+local currentId = game.PlaceId
+local matched, name = placeIsListed(data.places, currentId)
+
+if matched then
+    print("Safe demo: matched place:", name, currentId)
+    -- harmless visual indicator
+    local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+    gui.Name = "SafeDemoGui"
+    local label = Instance.new("TextLabel", gui)
+    label.Size = UDim2.new(0, 350, 0, 40)
+    label.Position = UDim2.new(0.5, -175, 0.05, 0)
+    label.Text = "SAFE DEMO: matched place → "..tostring(name)
+    label.BackgroundTransparency = 0.4
+    label.TextScaled = true
+else
+    print("Place not listed. ID:", currentId)
+end
+
+
+
+
+
+
 getgenv().LPH_NO_VIRTUALIZE = function(f) return f end
 
 if game.PlaceId == 84924278299650 or game.PlaceId == 105028250868995 or game.PlaceId == 94901423480147 then
